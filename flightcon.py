@@ -4,7 +4,7 @@ import busio
 from board import *
 from adafruit_bus_device.i2c_device import I2CDevice
 import adafruit_mpl3115a2
-from adafruit_lsm6ds.lsm6dsox import LSM6DSOX
+from adafruit_lsm6ds.ism330dhcx import ISM330DHCX
 
 required_alt = 500 
 
@@ -13,12 +13,10 @@ def preflight_check(altimeter, ground_alt):
         return True
     return False
 
-
-
 # Start main
 armed = False
 # Pressure is in pascals, 1 kPa = 1000 Pa
-sea_pressure = 103040
+sea_pressure = 101016
 # Var defines
 max_alt = 0
 ALT_DELTA_LANDED = 5
@@ -31,12 +29,15 @@ if __name__ == "__main__":
     i2c = busio.I2C(SCL, SDA)
     altimeter = adafruit_mpl3115a2.MPL3115A2(i2c, address=altimeterid)
     altimeter.sealevel_pressure = sea_pressure
-    accelerometer = adafruit_lsm6ds.LSM6DSOX(i2c, address=accelerometerid)
+    accelerometer = ISM330DHCX(i2c, address=accelerometerid)
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
+    print("Init pressure: " + init_pressure)
     init_temp = altimeter.temperature
+    print("Init temperature: " + init_temp)
     init_alt = altimeter.altitude
+    print("Init altitude: " + init_alt)
 
 
     # Check every second to see if we've started flying
@@ -75,9 +76,8 @@ if __name__ == "__main__":
 
     # Print battery state
 
-    # Print 
+    # Print survivability metrics
 
     # Transmit ground data back to the flight station
 
-    
     # Save data to a file
