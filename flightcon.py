@@ -4,7 +4,7 @@ import busio
 from board import *
 from adafruit_bus_device.i2c_device import I2CDevice
 import adafruit_mpl3115a2
-import adafruit_lsm6ds
+from adafruit_lsm6ds.lsm6dsox import LSM6DSOX
 
 required_alt = 500 
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     i2c = busio.I2C(SCL, SDA)
     altimeter = adafruit_mpl3115a2.MPL3115A2(i2c, address=altimeterid)
     altimeter.sealevel_pressure = sea_pressure
-    accelerometer = adafruit_lsm6ds.ISM330DHCS(i2c, address=accelerometerid)
+    accelerometer = adafruit_lsm6ds.LSM6DSOX(i2c, address=accelerometerid)
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
