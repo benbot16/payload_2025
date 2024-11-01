@@ -23,7 +23,7 @@ ALT_DELTA_LANDED = 5
 
 # Main Func
 if __name__ == "__main__":
-    #init devices
+    #init devices   
     accelerometerid = 0x6a
     altimeterid = 0x60
     i2c = busio.I2C(SCL, SDA)
@@ -33,11 +33,11 @@ if __name__ == "__main__":
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
-    print("Init pressure: " + init_pressure)
+    print("Init pressure: " + str(init_pressure))
     init_temp = altimeter.temperature
-    print("Init temperature: " + init_temp)
+    print("Init temperature: " + str(init_temp))
     init_alt = altimeter.altitude
-    print("Init altitude: " + init_alt)
+    print("Init altitude: " + str(init_alt))
 
 
     # Check every second to see if we've started flying
@@ -64,11 +64,11 @@ if __name__ == "__main__":
         time.sleep(0.5)
 
     # Print landing data
-    print("LZ Pressure: " + altimeter.pressure)
+    print("LZ Pressure: " + str(altimeter.pressure))
     lz_pressure = altimeter.pressure
-    print("LZ Temp: " + altimeter.temperature)
+    print("LZ Temp: " + str(altimeter.temperature))
     lz_temp = altimeter.temperature
-    print("LZ Altitude: " + altimeter.altitude)
+    print("LZ Altitude: " + str(altimeter.altitude))
     lz_altitude = altimeter.altitude
 
     # Print postflight collected data
