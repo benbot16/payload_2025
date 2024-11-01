@@ -31,7 +31,7 @@ if __name__ == "__main__":
     i2c = busio.I2C(SCL, SDA)
     altimeter = adafruit_mpl3115a2.MPL3115A2(i2c, address=altimeterid)
     altimeter.sealevel_pressure = sea_pressure
-    accelerometer = adafruit_lsm6ds.ISM330DHCS(i2c, address=accelerometerid)
+    accelerometer = adafruit_lsm6ds.LSM6DSOX(i2c, address=accelerometerid)
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
