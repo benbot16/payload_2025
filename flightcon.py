@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     # Wait for the rocket to land, then collect ground data
     current_alt = altimeter.altitude - ALT_DELTA_LANDED
-    while(current_alt > altimeter.altitude)
+    while(current_alt > altimeter.altitude):
         current_alt = altimeter.altitude - ALT_DELTA_LANDED
         time.sleep(0.5)
 
