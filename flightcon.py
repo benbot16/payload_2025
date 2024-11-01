@@ -4,6 +4,7 @@ import busio
 from board import *
 from adafruit_bus_device.i2c_device import I2CDevice
 import adafruit_mpl3115a2
+import adafruit_lsm6ds
 
 required_alt = 500 
 
@@ -18,6 +19,9 @@ def preflight_check(altimeter, ground_alt):
 armed = False
 # Pressure is in pascals, 1 kPa = 1000 Pa
 sea_pressure = 103040
+# Var defines
+max_alt = 0
+ALT_DELTA_LANDED = 5
 
 # Main Func
 if __name__ == "__main__":
@@ -27,17 +31,18 @@ if __name__ == "__main__":
     i2c = busio.I2C(SCL, SDA)
     altimeter = adafruit_mpl3115a2.MPL3115A2(i2c, address=altimeterid)
     altimeter.sealevel_pressure = sea_pressure
-    accelerometer = I2CDevice(i2c, accelrometerid)
+    accelerometer = adafruit_lsm6ds.ISM330DHCS(i2c, address=accelerometerid)
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
-    init_temp = sensor.temperature
-    init_alt = sensor.altitude
+    init_temp = altimeter.temperature
+    init_alt = altimeter.altitude
 
 
-    while not preflight_check(altimeter, ground_alt):
-            time.sleep(1)
-        continue
+    # Check every second to see if we've started flying
+    while not preflight_check(altimeter, init_alt):
+        time.sleep(1)
+
     armed = True
     print("Arming triggered")
    
@@ -49,9 +54,28 @@ if __name__ == "__main__":
         time.sleep(0.2)
 
     # Do apogee-based stuff
+    print("Apogee: " + max_alt)
 
     # Wait for the rocket to land, then collect ground data
+    current_alt = altimeter.altitude - ALT_DELTA_LANDED
+    while(current_alt > altimeter.altitude)
+        current_alt = altimeter.altitude - ALT_DELTA_LANDED
+        time.sleep(0.5)
 
+    # Print landing data
+    print("LZ Pressure: " + altimeter.pressure)
+    lz_pressure = altimeter.pressure
+    print("LZ Temp: " + altimeter.temperature)
+    lz_temp = altimeter.temperature
+    print("LZ Altitude: " + altimeter.altitude)
+    lz_altitude = altimeter.altitude
+
+    # Print postflight collected data
+    print("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
+
+    # Print battery state
+
+    # Print 
 
     # Transmit ground data back to the flight station
 
