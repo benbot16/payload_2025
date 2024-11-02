@@ -71,13 +71,13 @@ if __name__ == "__main__":
     # Print landing data
     print("LZ Pressure: " + str(altimeter.pressure))
     lz_pressure = altimeter.pressure
-    outfile.write(lz_pressure)
+    outfile.write(str(lz_pressure))
     print("LZ Temp: " + str(altimeter.temperature))
     lz_temp = altimeter.temperature
-    outfile.write(lz_temp)
+    outfile.write(str(lz_temp))
     print("LZ Altitude: " + str(altimeter.altitude))
     lz_altitude = altimeter.altitude
-    outfile.write(lz_altitude)
+    outfile.write(str(lz_altitude))
 
     # Print postflight collected data
     print("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
