@@ -18,7 +18,7 @@ def preflight_check(altimeter, ground_alt):
 # Start main
 armed = False
 # Pressure is in pascals, 1 kPa = 1000 Pa
-sea_pressure = 102268
+sea_pressure = 1023
 # Var defines
 max_alt = 0, 0, 0
 max_x_accel, max_y_accel, max_z_accel = 0, 0, 0
