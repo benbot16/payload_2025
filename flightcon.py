@@ -7,7 +7,7 @@ import adafruit_mpl3115a2
 from adafruit_lsm6ds.ism330dhcx import ISM330DHCX
 from datetime import datetime
 
-required_alt = 500 
+required_alt = 1000
 
 def preflight_check(altimeter, ground_alt):
     if((altimeter.altitude - ground_alt) > required_alt):
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         time.sleep(0.2)
 
     # Do apogee-based stuff
-    print("Apogee: " + max_alt)
+    print("Apogee: " + str(max_alt))
 
     # Wait for the rocket to land, then collect ground data
     current_alt = altimeter.altitude - ALT_DELTA_LANDED
