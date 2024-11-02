@@ -11,6 +11,7 @@ required_alt = 1000
 
 def preflight_check(altimeter, ground_alt):
     if((altimeter.altitude - ground_alt) > required_alt):
+        print("Triggered with delta " + str(altimeter.altitude - ground_alt))
         return True
     return False
 
