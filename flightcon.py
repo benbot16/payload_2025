@@ -21,6 +21,8 @@ armed = False
 sea_pressure = 101016
 # Var defines
 max_alt = 0
+max_x_accel, max_y_accel, max_z_accel = 0
+
 ALT_DELTA_LANDED = 5
 
 # Main Func
@@ -34,7 +36,7 @@ if __name__ == "__main__":
     accelerometer = ISM330DHCX(i2c, address=accelerometerid)
 
     #init record file
-    outfile = open("log.txt", "w")
+    outfile = open("log-" + datetime.now().strftime("%d-%m-%Y_%H:%M:%S") + ".txt", "w")
 
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
@@ -47,7 +49,17 @@ if __name__ == "__main__":
 
     # Check every second to see if we've started flying
     while not preflight_check(altimeter, init_alt):
-        time.sleep(1)
+        # Do accel stuff
+        x, y, z = accelerometer.acceleration
+        if(x > max_x_accel):
+            max_x_accel = x
+        if(y > max_y_accel):
+            max_y_accel = y
+        if(z > max_z_accel):
+            max_z_accel = z
+
+        # Sleep until we launch
+        time.sleep(0.5)
 
     armed = True
     print("Arming triggered")
@@ -58,6 +70,16 @@ if __name__ == "__main__":
     max_alt = init_alt
     while altimeter.altitude > max_alt:
         max_alt = altimeter.altitude
+        # Do accel stuff
+        x, y, z = accelerometer.acceleration
+        if(x > max_x_accel):
+            max_x_accel = x
+        if(y > max_y_accel):
+            max_y_accel = y
+        if(z > max_z_accel):
+            max_z_accel = z
+
+
         time.sleep(0.2)
 
     # Do apogee-based stuff
@@ -67,6 +89,14 @@ if __name__ == "__main__":
     current_alt = altimeter.altitude - ALT_DELTA_LANDED
     while(current_alt > altimeter.altitude):
         current_alt = altimeter.altitude - ALT_DELTA_LANDED
+        # Do accel stuff
+        x, y, z = accelerometer.acceleration
+        if(x > max_x_accel):
+            max_x_accel = x
+        if(y > max_y_accel):
+            max_y_accel = y
+        if(z > max_z_accel):
+            max_z_accel = z
         time.sleep(0.5)
 
     # Print landing data
@@ -81,8 +111,8 @@ if __name__ == "__main__":
     outfile.write(str(lz_altitude))
 
     # Print postflight collected data
-    print("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
-    outfile.write("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
+    print("Final gyro: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.gyro))
+    outfile.write("Final gyro: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.gyro))
 
     # Print battery state
 
