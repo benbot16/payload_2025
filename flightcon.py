@@ -5,6 +5,7 @@ from board import *
 from adafruit_bus_device.i2c_device import I2CDevice
 import adafruit_mpl3115a2
 from adafruit_lsm6ds.ism330dhcx import ISM330DHCX
+from datetime import datetime
 
 required_alt = 500 
 
@@ -31,6 +32,9 @@ if __name__ == "__main__":
     altimeter.sealevel_pressure = sea_pressure
     accelerometer = ISM330DHCX(i2c, address=accelerometerid)
 
+    #init record file
+    outfile = open("log.txt", "w")
+
     #Get original pressure/temp/alt
     init_pressure = altimeter.pressure
     print("Init pressure: " + str(init_pressure))
@@ -46,6 +50,7 @@ if __name__ == "__main__":
 
     armed = True
     print("Arming triggered")
+    outfile.write("Armed at time: " + datetime.now().strftime("%H:%M:%S"))
    
     # Continuously poll max_alt until we hit apogee and start coming down again
     # Starts at our initial ground altitude
@@ -66,13 +71,17 @@ if __name__ == "__main__":
     # Print landing data
     print("LZ Pressure: " + str(altimeter.pressure))
     lz_pressure = altimeter.pressure
+    outfile.write(lz_pressure)
     print("LZ Temp: " + str(altimeter.temperature))
     lz_temp = altimeter.temperature
+    outfile.write(lz_temp)
     print("LZ Altitude: " + str(altimeter.altitude))
     lz_altitude = altimeter.altitude
+    outfile.write(lz_altitude)
 
     # Print postflight collected data
     print("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
+    outfile.write("Maximum Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (accelerometer.acceleration))
 
     # Print battery state
 
@@ -80,4 +89,5 @@ if __name__ == "__main__":
 
     # Transmit ground data back to the flight station
 
-    # Save data to a file
+    # Close our file up
+    outfile.close()
