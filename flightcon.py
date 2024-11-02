@@ -10,7 +10,7 @@ from datetime import datetime
 required_alt = 1000
 
 def preflight_check(altimeter, ground_alt):
-    if((altimeter.altitude - ground_alt) > required_alt):
+    if(max((altimeter.altitude - ground_alt), 0) > required_alt):
         print("Triggered with delta " + str(altimeter.altitude - ground_alt))
         return True
     return False
@@ -18,7 +18,7 @@ def preflight_check(altimeter, ground_alt):
 # Start main
 armed = False
 # Pressure is in pascals, 1 kPa = 1000 Pa
-sea_pressure = 101016
+sea_pressure = 102268
 # Var defines
 max_alt = 0
 max_x_accel, max_y_accel, max_z_accel = 0
@@ -79,15 +79,14 @@ if __name__ == "__main__":
         if(z > max_z_accel):
             max_z_accel = z
 
-
-        time.sleep(0.2)
+        time.sleep(0.5)
 
     # Do apogee-based stuff
     print("Apogee: " + str(max_alt))
 
     # Wait for the rocket to land, then collect ground data
     current_alt = altimeter.altitude - ALT_DELTA_LANDED
-    while(current_alt > altimeter.altitude):
+    while(not (current_alt < (init_alt + required_alt)) or current_alt > altimeter.altitude):
         current_alt = altimeter.altitude - ALT_DELTA_LANDED
         # Do accel stuff
         x, y, z = accelerometer.acceleration
