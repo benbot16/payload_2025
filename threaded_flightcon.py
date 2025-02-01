@@ -8,7 +8,7 @@ import adafruit_mpl3115a2
 from adafruit_lsm6ds.ism330dhcx import ISM330DHCX
 from adafruit_mcp9600 import MCP9600
 from datetime import datetime
-from espeakng import ESpeakNG
+from pySpeakNG import speak
 
 # Required arming altitude - we need to get this high to allow apogee sensing to work
 required_alt = 1000
@@ -48,14 +48,13 @@ altimeter = adafruit_mpl3115a2.MPL3115A2(i2c, address=altimeterid)
 accelerometer = ISM330DHCX(i2c, address=accelerometerid)
 cockpit_thermo = MCP9600(i2c, address=cockpittempid)
 nose_thermo = MCP9600(i2c, address=nosetempid)
-transmitter = ESpeakNG()
 
 
 #Set update interval (in seconds)
 update_interval = 0.5
 
 def xmit_string(instring):
-    transmitter.say(instring)
+    speak(instring)
     return
 
 def accel_monitor_thread():
